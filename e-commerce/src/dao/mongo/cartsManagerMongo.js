@@ -1,8 +1,10 @@
 import { cartsModel } from "../models/cartsModel.js";
 
+
 export class CartsManagerMongo{
             constructor() {
                 this.model = cartsModel;
+                
             };
             //Aca creo el carrito
             async createCarts (productId) {
@@ -64,5 +66,25 @@ export class CartsManagerMongo{
 
             };
 
-
+            //Aca eliminamos un carrito segun su "id".
+            async deleteProduct(cartId) {
+                try {
+                  // Intenta encontrar y eliminar el carrito por su ID
+                  const cart = await this.model.findByIdAndDelete(cartId);
+              
+                  // Verifica si el carrito se encontró y se eliminó exitosamente
+                  if (!cart) {
+                    throw new Error("No se pudo encontrar el carrito a eliminar");
+                  }
+              
+                  // Devuelve el resultado que contiene el carrito eliminado
+                  return cart;
+                } catch (error) {
+                  console.log("deleteCart", error.message);
+              
+                  // Lanza una excepción con un mensaje específico si ocurre un error
+                  throw new Error("No se pudo eliminar el carrito");
+                };
+              };
+              
 } 
