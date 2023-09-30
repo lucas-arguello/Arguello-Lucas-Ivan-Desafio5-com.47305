@@ -1,8 +1,21 @@
-// import mongoose from "mongoose";
+import mongoose from "mongoose";
 
-// const messagesCollection = "messages" //asi se llama la coleccion en la Base de Datos
+//Aqui creo la coleccion "chatts" en la Base de Datos.
+const chatsCollection = "chats" 
 
-// const messageSchema = new mongoose.Schema({
+const chatSchema = new mongoose.Schema({
 
+    user: {
+        type:String,
+        unique: true,
+        required: true
+    },
+
+    message: {
+        type:String,
+        required: true
+    }
     
-// })
+ });
+
+ export const chatsModel = mongoose.model(chatsCollection, chatSchema);
