@@ -82,7 +82,12 @@ router.delete("/:pid", async (req,res) => {
     try {
         const productId = req.params.pid;
         const product = await productsServiceMongo.deleteProduct(productId);
-        res.json({ message: "Producto eliminado correctamente", data: product });
+        if (product === null) {
+            res.json({ status: "error", message: "No se encontró el producto a eliminar" });
+        } else {
+            res.json({ message: "Producto eliminado correctamente", data: product });
+            console.log("Producto eliminado correctamente");
+        }
     } catch (error) {
         res.json({ status: "error", message: error.message });
     }

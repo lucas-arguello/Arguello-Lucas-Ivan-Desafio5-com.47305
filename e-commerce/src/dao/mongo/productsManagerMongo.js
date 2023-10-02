@@ -53,10 +53,14 @@ export class ProductsManagerMongo{
     async deleteProduct(productId){
         try {
             const product = await this.model.findByIdAndDelete(productId);
+           
             if(!product){
-                throw new Error("No se pudo encontrar el producto a eliminar");
+
+                return null;
+                //throw new Error("No se pudo encontrar el producto a eliminar");
             }
-            return product;
+            console.log('Se elimino el producto:', product)
+            
         } catch (error) {
             console.log("deleteProduct",error.message);
             throw new Error("No se pudo eliminar el producto");

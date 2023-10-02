@@ -68,6 +68,8 @@ io.on("connection", async (socket)=> {
             //creamos los productos
             const createProduct = await productsServiceMongo.createProduct(productData);
 
+            console.log(createProduct);
+
             // const productId = createProduct._id;
 
             // createProduct._id = productId;
