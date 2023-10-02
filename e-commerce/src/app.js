@@ -2,6 +2,7 @@ import express from "express" // importamos el modulo "express" para poder usar 
 import { __dirname } from "./utils.js";//importamos la variable "__dirname" que va servir como punto de acceso a los arch. desde "src"
 import path from "path";
 //import { productsService } from "./dao/index.js"; 
+import mongoose from "mongoose";
 import { productsServiceMongo } from "./dao/index.js"; 
 
 
@@ -66,6 +67,11 @@ io.on("connection", async (socket)=> {
         try{    
             //creamos los productos
             const createProduct = await productsServiceMongo.createProduct(productData);
+
+            // const productId = createProduct._id;
+
+            // createProduct._id = productId;
+
             //obtenemos los productos
             const products = await productsServiceMongo.getProducts();
             //mostramos los productos

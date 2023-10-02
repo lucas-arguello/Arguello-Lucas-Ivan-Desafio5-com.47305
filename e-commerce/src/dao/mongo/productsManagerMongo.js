@@ -1,3 +1,5 @@
+import mongoose  from "mongoose";
+
 import { productsModel } from "./models/productsModel.js";
 
 export class ProductsManagerMongo{
@@ -37,7 +39,7 @@ export class ProductsManagerMongo{
 
     async updateProduct(productId, newProductInfo){
         try {
-            const product = await this.model.findByIdAndUpdate(productId,newProductInfo,{new:true});
+            const product = await this.model.findByIdAndUpdate((productId),newProductInfo,{new:true});
             if(!product){
                 throw new Error("No se pudo encontrar el producto a actualizar");
             }

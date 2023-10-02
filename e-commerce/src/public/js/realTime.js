@@ -38,36 +38,52 @@ createProductForm.addEventListener("submit",(e)=>{
 //recibimos los productos desde el server de websocket.
 
 socketClient.on("productsArray", (dataProdcuts) => {
-    //console.log(dataProdcuts);
-    let productsElems= "";
-    //Iteramos en el array de productos creamos una lista.
-    dataProdcuts.forEach(prod =>{ 
-        productsElems+= 
-        ` <li>
-                <p>Nombre : ${prod.title}</p>
-                <p>Descripcion: ${prod.description}</p>
-                <p>Precio: ${prod.price}</p>
-                <p>Codigo: ${prod.code}</p>
-                <p>imagen: ${prod.thumbnail}</p>
-                <p>Stock: ${prod.stock}</p>
-                <p>Categoria: ${prod.category}</p> 
-                <button class="deleteProduct" data-id="${prod.id}">Eliminar</button>
-          </li> `
-          //console.log(productsElems);
-          });
-    //inserto la lista de productos en el HTML de "realtime.hbs"      
-    productList.innerHTML= productsElems;
-});
+        //console.log(dataProdcuts);
+        let productsElems= "";
+        //Iteramos en el array de productos creamos una lista.
+        dataProdcuts.forEach(prod =>{ 
+            productsElems+= 
+            ` <li>
+                    <p>Nombre : ${prod.title}</p>
+                    <p>Descripcion: ${prod.description}</p>
+                    <p>Precio: ${prod.price}</p>
+                    <p>Codigo: ${prod.code}</p>
+                    <p>imagen: ${prod.thumbnail}</p>
+                    <p>Stock: ${prod.stock}</p>
+                    <p>Categoria: ${prod.category}</p> 
+                    <button class="deleteProduct" data-id="${prod._id}">Eliminar</button>
+            </li> `;
+            //console.log(productsElems);
+            
+            });
+            //inserto la lista de productos en el HTML de "realtime.hbs"      
+            productList.innerHTML= productsElems;
+        });
+
 
 //enviamos la info del form al socket del servidor para eliminar un producto
 document.addEventListener('click', function (e) {
+    if (e.target) {
+        if (e.target.classList.contains('deleteProduct')) {
+            // Obtener el ID del producto como una cadena
+            const prodId = e.target.dataset.id.toString();
+            console.log('ID del producto eliminado:', prodId);           
+              // Envía el ID al servidor para ser eliminado
+              socketClient.emit('deleteProduct', prodId);
+           
+        }
+    }
     //verifico que en el click reciba la clase deleteProduct
     if (e.target) {
         if (e.target.classList.contains('deleteProduct')) {
             //obtengo el id del producto
-            const prodId = parseInt(e.target.dataset.id);
+            const prodId = (e.target.dataset.id);
             //envio el id al socket para ser eliminado
             socketClient.emit('deleteProduct', prodId);
         }
     }
 });
+
+//
+
+

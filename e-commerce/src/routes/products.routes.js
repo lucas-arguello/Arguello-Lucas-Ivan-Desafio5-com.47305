@@ -1,6 +1,7 @@
 //import fs from "fs";// importamos el modulo "fs" file system, para que funcionen las funciones asincronas.
 import {Router} from "express";//importamos "routes" desde la libreria de express, para poder realizar el ruteo de los metodos.
 //import { productsService } from "../dao/index.js";//importamos la instancia del Manager de productos, para poder usar los diferentes metodos que definimos dentro de la clase.
+import { Mongoose } from "mongoose";
 import { productsServiceMongo } from "../dao/index.js";
 
 
@@ -12,36 +13,9 @@ router.get("/", async (req,res) => {
     try{
 
         const products = await productsServiceMongo.getProducts();
-        const limit = req.query.limit;//creamos el query param "limit".
         
-        const limitNum = parseInt(limit);//convertimos a "limit" de string a numero
-
-        let response;
-
-        if (limit) {
-            
-            //utilizamos el metodo "slice" para obtener una parte del arreglo segun el numero limite que elija el cliente.
-            const productsLimit = products.slice(0, limitNum);
-            response = { message: "Listado de productos (limitado)", data: productsLimit };
-        } else {
-            //respondemos la peticion enviando el contenido guardado en prodcuts
-            response = { message: "Listado de productos", data: products };
-        }
-
-        res.json(response);
-        // if(limit){
-        //     //utilizamos el metodo "slice" para obtener una parte del arreglo segun el numero limite que elija el cliente.
-        //     const productsLimit = products.slice(0,limitNum);
-        //     res.json(productsLimit);
-            
-        //    }else{
-        //        //respondemos la peticion enviando el contenido guardado en prodcuts
-        //        res.json({data:products})
-            
-        //    }
-        
-
-        // res.json({message:"Listado de productos", data:products});
+        res.json(products);
+       
 
     }catch(error){
         console.log("getProducts",error.message);
@@ -55,7 +29,7 @@ router.get("/", async (req,res) => {
 router.get("/:pid", async (req,res) => {
     try{
         //parseamos el valor recibido (como string) de la peticion, a valor numerico, para poder compararlo.
-        const productId = parseInt(req.params.pid);
+        const productId = req.params.pid;
         //con el "productService", llamamos el metodo "getProductById" y le pasamos el Id que habiamos parseado. 
         const product = await productsServiceMongo.getProductById(productId);
         res.json({message:"El producto seleccionado es: ", data:product});
@@ -91,10 +65,10 @@ router.post("/", async (req,res) => {
 //Usamos el metodo PUT para crear una ruta que nos permita modificar un producto.
 router.put("/:pid", async (req,res) => {
     try {
-        const productId = parseInt(req.params.pid);
+        const productId = req.params.pid;
         const updatedFields = req.body;
-        await productsServiceMongo.updateProduct(productId, updatedFields);
-        res.json({ message: "Producto actualizado correctamente" });
+        const product= await productsServiceMongo.updateProduct(productId, updatedFields);
+        res.json({ message: "Producto actualizado correctamente", data: product});
     } catch (error) {
         res.json({ status: "error", message: error.message });
     }
@@ -106,9 +80,9 @@ router.put("/:pid", async (req,res) => {
 //Usamos el metodo DELETE para crear una ruta que nos permita eliminar un producto.
 router.delete("/:pid", async (req,res) => {
     try {
-        const productId = parseInt(req.params.pid);
-        await productsServiceMongo.deleteProduct(productId);
-        res.json({ message: "Producto eliminado correctamente" });
+        const productId = req.params.pid;
+        const product = await productsServiceMongo.deleteProduct(productId);
+        res.json({ message: "Producto eliminado correctamente", data: product });
     } catch (error) {
         res.json({ status: "error", message: error.message });
     }

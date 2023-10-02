@@ -20,7 +20,7 @@ router.get("/", async (req, res) => {
 router.get("/:cid", async (req, res) => {
     try {
       
-      const cartId = parseInt(req.params.cid); //obtengo el id del carrito ingresado por el cliente en la URL.
+      const cartId = req.params.cid; //obtengo el id del carrito ingresado por el cliente en la URL.
       const carts = await cartsServiceMongo.getCarts(); //traigo todos los carritos con el metodo "getCarts" del "cartService", para luego buscar en el listado de carritos.
       
       const cart = carts.find(cart => cart.id === cartId); //busco el carrito por su id.
@@ -48,8 +48,8 @@ router.post("/", async (req, res) => {
     try {
 
       //obtengo el id del carrito y el id del producto ingresado por el cliente en la URL.
-      const cartsId = parseInt(req.params.cid);
-      const productId = parseInt(req.params.pid);
+      const cartsId = req.params.cid;
+      const productId = req.params.pid;
 
       const quantity = 1;
       
