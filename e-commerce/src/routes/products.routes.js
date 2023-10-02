@@ -19,6 +19,7 @@ router.get("/", async (req,res) => {
         let response;
 
         if (limit) {
+            
             //utilizamos el metodo "slice" para obtener una parte del arreglo segun el numero limite que elija el cliente.
             const productsLimit = products.slice(0, limitNum);
             response = { message: "Listado de productos (limitado)", data: productsLimit };
@@ -26,6 +27,8 @@ router.get("/", async (req,res) => {
             //respondemos la peticion enviando el contenido guardado en prodcuts
             response = { message: "Listado de productos", data: products };
         }
+
+        res.json(response);
         // if(limit){
         //     //utilizamos el metodo "slice" para obtener una parte del arreglo segun el numero limite que elija el cliente.
         //     const productsLimit = products.slice(0,limitNum);
@@ -41,6 +44,7 @@ router.get("/", async (req,res) => {
         // res.json({message:"Listado de productos", data:products});
 
     }catch(error){
+        console.log("getProducts",error.message);
         //respuesta para que el cliente sepa que la peticion no fue resuelta correctamente
         res.status(500).json({ status: "error", message: error.message }); 
     };
