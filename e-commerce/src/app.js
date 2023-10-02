@@ -1,7 +1,9 @@
 import express from "express" // importamos el modulo "express" para poder usar sus metodos.
 import { __dirname } from "./utils.js";//importamos la variable "__dirname" que va servir como punto de acceso a los arch. desde "src"
 import path from "path";
-import { productsService } from "./dao/index.js"; 
+//import { productsService } from "./dao/index.js"; 
+import { productsServiceMongo } from "./dao/index.js"; 
+
 
 import { connectDB } from "./config/dbConection.js";
 
@@ -49,7 +51,7 @@ io.on("connection", async (socket)=> {
 
     try{
         //Obtengo los productos 
-        const products = await productsService.getProducts();
+        const products = await productsServiceMongo.getProducts();
         //y los envio al cliente
         socket.emit("productsArray", products)
 
@@ -63,9 +65,9 @@ io.on("connection", async (socket)=> {
     socket.on("addProduct",async (productData) =>{
         try{    
             //creamos los productos
-            const createProduct = await productsService.createProduct(productData);
+            const createProduct = await productsServiceMongo.createProduct(productData);
             //obtenemos los productos
-            const products = await productsService.getProducts();
+            const products = await productsServiceMongo.getProducts();
             //mostramos los productos
             io.emit("productsArray", products)
 
@@ -79,9 +81,9 @@ io.on("connection", async (socket)=> {
     socket.on('deleteProduct', async (productId) => {
         try {
             // Eliminar el producto de la lista de productos por su ID
-            await productsService.deleteProduct(productId);
+            await productsServiceMongo.deleteProduct(productId);
             // Obtener la lista actualizada de productos
-            const updatedProducts = await productsService.getProducts();
+            const updatedProducts = await productsServiceMongo.getProducts();
             // Emitir la lista actualizada de productos al cliente
             socket.emit('productsArray', updatedProducts);
         } catch (error) {

@@ -1,12 +1,12 @@
 import {Router} from "express";//importamos "routes" desde la libreria de express
-import { productsService } from "../dao/index.js";
-
+//import { productsService } from "../dao/index.js";
+import { productsServiceMongo } from "../dao/index.js";
 
 const router = Router();
 
 router.get("/", async (req,res)=>{
     try{
-            const products = await productsService.getProducts();
+            const products = await productsServiceMongo.getProducts();
             console.log(products)
             //aca renderizamos la vista del "home", y le pasamos un objeto con los datos de nuestros productos y los enviamos al "home.hbs".
             res.render("home", {products: products});
