@@ -8,6 +8,7 @@ export class ProductsManagerMongo{
         
     };
 
+    //Esta funcion es para crear el producto.
     async createProduct(productInfo){
         try {
             const product = await this.model.create(productInfo);
@@ -18,8 +19,10 @@ export class ProductsManagerMongo{
         }
     };
 
+    //Esta funcion es para obtener el listado de productos.
     async getProducts(){
         try {
+            //tilice el metodo ".lean()" para que me permitiera usar la propiedad "title"
             const products = await this.model.find().lean();
             return products;
         } catch (error) {
@@ -28,6 +31,7 @@ export class ProductsManagerMongo{
         }
     };
 
+    //Esta funcion es para obtener un producto por su ID
     async getProductById(productId){
         try {
             const product = await this.model.findById(productId);
@@ -38,6 +42,7 @@ export class ProductsManagerMongo{
         }
     };
 
+    //Esta funcion es para actualizar un producto seleccionado por su ID.
     async updateProduct(productId, newProductInfo){
         try {
             const product = await this.model.findByIdAndUpdate((productId),newProductInfo,{new:true});
@@ -51,6 +56,7 @@ export class ProductsManagerMongo{
         }
     };
 
+    //Esta funcion es para eliminar un producto seleccionado por su ID..
     async deleteProduct(productId){
         try {
             const product = await this.model.findByIdAndDelete(productId);

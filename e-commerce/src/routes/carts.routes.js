@@ -35,7 +35,7 @@ router.get("/:cid", async (req, res) => {
 router.post("/", async (req, res) => {
     try {
       
-      const newCart = await cartsServiceMongo.createCart();//traigo el metodo "createCart" del "cartService", para poder crear un carrito.
+      const newCart = await cartsServiceMongo.createCarts();//traigo el metodo "createCart" del "cartService", para poder crear un carrito.
       res.json({ message: "Carrito creado", data: newCart });//la respuesta a la solicitud del cliente.
     
     } catch (error) {

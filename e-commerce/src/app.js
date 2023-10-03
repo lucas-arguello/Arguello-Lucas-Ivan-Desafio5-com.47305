@@ -4,6 +4,8 @@ import path from "path";
 //import { productsService } from "./dao/index.js"; 
 import mongoose from "mongoose";
 import { productsServiceMongo } from "./dao/index.js"; 
+import { cartsServiceMongo } from "./dao/index.js";
+import { chatsServiceMongo } from "./dao/index.js";
 
 
 import { connectDB } from "./config/dbConection.js";

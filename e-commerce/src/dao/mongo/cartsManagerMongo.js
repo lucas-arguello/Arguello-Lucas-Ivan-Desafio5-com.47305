@@ -6,7 +6,7 @@ export class CartsManagerMongo{
                 this.model = cartsModel;
                 
             };
-            //Aca creo el carrito
+            //Esta funcion es para crear el carrito.
             async createCarts (productId) {
                 try{
                     const cart = await this.model.create({ product: [{ productId, quantity: 1 }] });
@@ -14,14 +14,14 @@ export class CartsManagerMongo{
                     return cart
 
                 }catch(error){
-                    console.log("createCarts",error.message);
+                    console.log("createCarts ",error.message);
                     throw new Error("No se pudo crear el carrito");
 
                 };
                 
             };
 
-            //Aca obtengo el listado de carritos
+            //Esta funcion es para obtener el listado de carritos.
             async getCarts () {
                 try {
 
@@ -36,7 +36,7 @@ export class CartsManagerMongo{
                 };
             };
 
-            //Aca agragmos productos al carrito
+            //Esta funcion es para agregar productos al carrito
             async addProduct(cartId, productId) {
                 try {
                     const cart = await this.model.findById(cartId);
@@ -66,7 +66,7 @@ export class CartsManagerMongo{
 
             };
 
-            //Aca eliminamos un carrito segun su "id".
+            //Esta funcion es para eliminar un carrito segun su "id".
             async deleteProduct(cartId) {
                 try {
                   // Intento encontrar y eliminar el carrito por su ID
