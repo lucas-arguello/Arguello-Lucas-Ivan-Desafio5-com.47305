@@ -24,7 +24,7 @@ createProductForm.addEventListener("submit",(e)=>{
     jsonData.stock = parseInt(jsonData.stock);
     jsonData.price = parseInt(jsonData.price);
     
-    console.log(jsonData);
+    console.log("Un producto fue creado: ",jsonData);
 
     //ahora enviamos la info del formulario (jsonData) al socket del servidor
     socketClient.emit("addProduct", jsonData);
@@ -53,7 +53,7 @@ socketClient.on("productsArray", (dataProdcuts) => {
                     <p>Categoria: ${prod.category}</p> 
                     <button class="deleteProduct" data-id="${prod._id}">Eliminar</button>
             </li> `;
-            //console.log(productsElems);
+            // console.log(productsElems);
             
             });
             //inserto la lista de productos en el HTML de "realtime.hbs"      
@@ -67,7 +67,7 @@ document.addEventListener('click', function (e) {
         if (e.target.classList.contains('deleteProduct')) {
             // Obtener el ID del producto como una cadena
             const prodId = e.target.dataset.id.toString();
-            console.log('ID del producto eliminado:', prodId);           
+            console.log("ID del producto eliminado: ", prodId);           
               // Envía el ID al servidor para ser eliminado
               socketClient.emit('deleteProduct', prodId);
            

@@ -15,7 +15,7 @@ router.get("/", async (req,res)=>{
             res.status(500).json({ message: error.message }); 
         }
 
-});
+});//
 
 //ruta que esta vinculada al servidor de "websocket"
 router.get("/realtimeproducts", (req,res)=>{

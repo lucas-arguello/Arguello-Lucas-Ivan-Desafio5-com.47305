@@ -5,6 +5,7 @@ import { productsModel } from "./models/productsModel.js";
 export class ProductsManagerMongo{
     constructor(){
         this.model = productsModel;
+        
     };
 
     async createProduct(productInfo){
@@ -19,7 +20,7 @@ export class ProductsManagerMongo{
 
     async getProducts(){
         try {
-            const products = await this.model.find();
+            const products = await this.model.find().lean();
             return products;
         } catch (error) {
             console.log("getProducts",error.message);
