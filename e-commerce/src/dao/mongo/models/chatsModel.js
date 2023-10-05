@@ -7,7 +7,7 @@ const chatSchema = new mongoose.Schema({
 
     user: {
         type:String,
-        unique: true,
+        //unique: true,
         required: true
     },
 

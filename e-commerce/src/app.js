@@ -31,6 +31,7 @@ const httpServer = app.listen(port, () => console.log(`Servidor OK, puerto: ${po
 //conexxion a la Base de Datos
 connectDB();
 
+
 //servidor de websocket
 const io = new Server(httpServer)
 
@@ -64,7 +65,7 @@ io.on("connection", async (socket)=> {
         }
     
 
-//Recibimos los productos desde el socket del cliente.
+    //Recibimos los productos desde el socketClient de "realTime.js".
     socket.on("addProduct",async (productData) =>{
         try{    
             //creamos los productos
@@ -81,12 +82,12 @@ io.on("connection", async (socket)=> {
             //mostramos los productos
             io.emit("productsArray", products)
 
-        } catch (error) {
-            console.error('Error al crear un producto:', error.message);
-        }    
-    });
+            } catch (error) {
+                    console.error('Error al crear un producto:', error.message);
+            }    
+        });
 
-//Eliminamos los produtos.
+    //Eliminamos los produtos.
 
     socket.on('deleteProduct', async (productId) => {
         try {
@@ -96,14 +97,33 @@ io.on("connection", async (socket)=> {
             const updatedProducts = await productsServiceMongo.getProducts();
             // Emitir la lista actualizada de productos al cliente
             socket.emit('productsArray', updatedProducts);
+            } catch (error) {
+                // Manejar errores, por ejemplo, si el producto no se encuentra
+                console.error('Error al eliminar un producto:', error.message);
+            }
+        });
+
+//Recibimos los mensajes desde el socketClient de "chats.js".
+     
+    //traigo todos los chat
+    const msg = await chatsServiceMongo.getMessage()
+    //emito los caht 
+    socket.emit('chatHistory', msg)
+    //recibo mensaje de cada usuario desde el cliente
+    socket.on('msgChat', async (messageClient) => {//recibo el mensaje del front
+        try {
+            //creo los chat en la base de datos
+            await chatsServiceMongo.addMessage(messageClient);
+            //obtengo y actualizo los mensajes
+            const msg = await chatsServiceMongo.getMessage();
+            //replico y envio el mensaje a todos los usuarios
+            io.emit('chatHistory', msg);//envio el mensaje
+            
         } catch (error) {
-            // Manejar errores, por ejemplo, si el producto no se encuentra
-            console.error('Error al eliminar un producto:', error.message);
+            console.error('Error al enviar el mensaje:', error.message);
         }
-    });
+
+    })
+    
+
 });
-
-
-
-
-

@@ -7,7 +7,7 @@ const router = Router();
 router.get("/", async (req,res)=>{
     try{
             const products = await productsServiceMongo.getProducts();
-            console.log(products)
+            //console.log(products)
             //aca renderizamos la vista del "home", y le pasamos un objeto con los datos de nuestros productos y los enviamos al "home.hbs".
             res.render("home", {products: products});
 
@@ -22,6 +22,18 @@ router.get("/realtimeproducts", (req,res)=>{
     try{    
             //aca renderizamos la vista del "realtime".
             res.render("realtime")
+
+        } catch (error) {
+            res.status(500).json({ message: error.message });        
+        }
+
+});
+
+//ruta que esta vinculada al servidor de "websocket"
+router.get("/chats", (req,res)=>{
+    try{    
+            //aca renderizamos la vista del "realtime".
+            res.render("chats")
 
         } catch (error) {
             res.status(500).json({ message: error.message });        

@@ -37,22 +37,27 @@ export class CartsManagerMongo{
             };
 
             //Esta funcion es para agregar productos al carrito
-            async addProduct(cartId, productId) {
+            async addProduct(cartId, productId, quantity) {
                 try {
-                    const cart = await this.model.findById(cartId);
-                    if (!cart) {
-                      throw new Error("Carrito no encontrado");
-                    }
-              
+                    const cart = await this.model.findOneAndUpdate({ _id: cartId })
+           
+                        if(!cart){
+                            throw new Error("No es posible obtener los carritos");
+                        }
+                                  
                     // Verifica si el producto ya existe en el carrito
-                    const existingProduct = cart.product.find((item) => item.productId === productId);
+                    const existingProduct = cart.products.find((item) => item.id === productId);
 
                     if (existingProduct) {
                         // Incrementa la cantidad si el producto ya existe
                         existingProduct.quantity += quantity || 1; 
                     } else {
                         // Agrega un nuevo producto al carrito
-                        cart.product.push({ productId, quantity: quantity || 1 });
+                        cart.products.push({ 
+                            id: productId, 
+                            quantity: quantity || 1 
+                        });
+
                     }
                     await cart.save();
               
@@ -67,24 +72,24 @@ export class CartsManagerMongo{
             };
 
             //Esta funcion es para eliminar un carrito segun su "id".
-            async deleteProduct(cartId) {
-                try {
-                  // Intento encontrar y eliminar el carrito por su ID
-                  const cart = await this.model.findByIdAndDelete(cartId);
+            // async deleteProduct(cartId) {
+            //     try {
+            //       // Intento encontrar y eliminar el carrito por su ID
+            //       const cart = await this.model.findByIdAndDelete(cartId);
               
-                  // Verifico si el carrito se encontró y se eliminó exitosamente
-                  if (!cart) {
-                    throw new Error("No se pudo encontrar el carrito a eliminar");
-                  }
+            //       // Verifico si el carrito se encontró y se eliminó exitosamente
+            //       if (!cart) {
+            //         throw new Error("No se pudo encontrar el carrito a eliminar");
+            //       }
               
-                  // Devuelve el resultado que contiene el carrito eliminado
-                  return cart;
-                } catch (error) {
-                  console.log("deleteCart", error.message);
+            //       // Devuelve el resultado que contiene el carrito eliminado
+            //       return cart;
+            //     } catch (error) {
+            //       console.log("deleteCart", error.message);
               
-                  // Lanza una excepción con un mensaje específico si ocurre un error
-                  throw new Error("No se pudo eliminar el carrito");
-                };
-              };
+            //       // Lanza una excepción con un mensaje específico si ocurre un error
+            //       throw new Error("No se pudo eliminar el carrito");
+            //     };
+            //   };
               
 };

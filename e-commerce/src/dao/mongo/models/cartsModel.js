@@ -5,7 +5,7 @@ const cartsCollection = "carts"
 
 //Aqui creo el esquema o modelo del carrito que quiero que se guarde en la Base de datos.
 const cartSchema = new mongoose.Schema({
-    product: {
+    products: {
             type: [
                 {
                     productId:String,
