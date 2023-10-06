@@ -39,26 +39,27 @@ export class CartsManagerMongo{
             //Esta funcion es para agregar productos al carrito
             async addProduct(cartId, productId, quantity) {
                 try {
-                    const cart = await this.model.findOneAndUpdate({ _id: cartId })
-           
-                        if(!cart){
-                            throw new Error("No es posible obtener los carritos");
-                        }
-                                  
-                    // Verifica si el producto ya existe en el carrito
-                    const existingProduct = cart.products.find((item) => item.id === productId);
 
-                    if (existingProduct) {
+                    const cart = await this.model.findById(cartId);
+
+                    if (!cart) {
+                        throw new Error("No es posible obtener el carrito");
+                    }
+            
+                    // Verifica si el producto ya existe en el carrito
+                    const existingProductIndex = cart.products.findIndex(item => item.id === productId);
+            
+                    if (existingProductIndex !== -1) {
                         // Incrementa la cantidad si el producto ya existe
-                        existingProduct.quantity += quantity || 1; 
+                        cart.products[existingProductIndex].quantity += quantity || 1;
                     } else {
                         // Agrega un nuevo producto al carrito
-                        cart.products.push({ 
-                            id: productId, 
-                            quantity: quantity || 1 
+                        cart.products.push({
+                            id: productId,
+                            quantity: quantity || 1
                         });
-
                     }
+                    
                     await cart.save();
               
                     return cart;
